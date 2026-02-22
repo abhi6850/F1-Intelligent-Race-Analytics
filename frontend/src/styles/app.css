@@ -1,0 +1,21 @@
+.card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 20px auto;
+  width: 400px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+button {
+  background: #d90429;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: gray;
+}

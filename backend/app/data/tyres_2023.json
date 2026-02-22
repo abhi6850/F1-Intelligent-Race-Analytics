@@ -1,0 +1,57 @@
+[
+  {
+    "compound": "Hard",
+    "color": "White",
+    "code": "C1-C3",
+    "avg_life_min": 28,
+    "avg_life_max": 40,
+    "grip_rating": 2,
+    "durability_rating": 5,
+    "description": "Lowest grip but highest durability. Used for long stints and low degradation tracks.",
+    "image": "/tyres/hard.png"
+  },
+  {
+    "compound": "Medium",
+    "color": "Yellow",
+    "code": "C2-C4",
+    "avg_life_min": 20,
+    "avg_life_max": 30,
+    "grip_rating": 3,
+    "durability_rating": 3,
+    "description": "Balanced compound offering decent grip and durability. Most common race tyre.",
+    "image": "/tyres/medium.png"
+  },
+  {
+    "compound": "Soft",
+    "color": "Red",
+    "code": "C3-C5",
+    "avg_life_min": 12,
+    "avg_life_max": 20,
+    "grip_rating": 5,
+    "durability_rating": 2,
+    "description": "Highest grip tyre but degrades quickly. Used for qualifying and aggressive undercuts.",
+    "image": "/tyres/soft.png"
+  },
+  {
+    "compound": "Intermediate",
+    "color": "Green",
+    "code": "Inter",
+    "avg_life_min": 15,
+    "avg_life_max": 25,
+    "grip_rating": 3,
+    "durability_rating": 3,
+    "description": "Used in damp conditions. Works best on partially wet tracks.",
+    "image": "/tyres/intermediate.png"
+  },
+  {
+    "compound": "Wet",
+    "color": "Blue",
+    "code": "Wet",
+    "avg_life_min": 10,
+    "avg_life_max": 20,
+    "grip_rating": 4,
+    "durability_rating": 4,
+    "description": "Used in heavy rain conditions. Maximum water displacement.",
+    "image": "/tyres/wet.png"
+  }
+]

@@ -1,0 +1,9 @@
+For backend
+1. cd backend
+2.  python -m uvicorn app.main:app --reload
+
+For frontend
+1. cd frontend
+2. npm run dev
+
+control + c to stop server/frontend

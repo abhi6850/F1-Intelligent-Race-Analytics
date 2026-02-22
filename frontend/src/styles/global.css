@@ -1,0 +1,77 @@
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: #0b0f1a;
+  color: #e5e7eb;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.section-card {
+  background: #111827;
+  border-radius: 14px;
+  padding: 25px;
+  margin-bottom: 40px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+button {
+  background: linear-gradient(90deg, #1e40af, #2563eb);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+select, input {
+  background: #1f2937;
+  border: 1px solid #374151;
+  color: white;
+  padding: 8px;
+  border-radius: 6px;
+  margin-left: 10px;
+}
+
+label {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.tab-content {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.tab-content.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tab-content {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.tab-content.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

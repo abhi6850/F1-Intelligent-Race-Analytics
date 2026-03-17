@@ -1,19 +1,21 @@
 F1 Intelligent Race Analytics
 
-AI-powered Formula 1 race strategy and performance simulation engine built using Machine Learning, vectorized simulation logic, and a full-stack analytics dashboard.
+F1 Intelligent Race Analytics is a machine learning–based race simulation platform designed to model lap performance and evaluate race strategies using real 2023 Formula 1 telemetry data.
 
-🚀 Overview
+The system predicts lap time deltas using a trained RandomForestRegressor and builds a simulation layer on top of it to analyze pit strategies, tyre behavior, and race pace under different conditions.
 
-F1 Intelligent Race Analytics is a full-stack ML-driven race simulation platform that predicts lap performance and simulates race strategies using real 2023 Formula 1 telemetry.
+Unlike a static analytics dashboard, this project focuses on efficient simulation through vectorized computations and optimized model inference.
 
-The system uses a trained RandomForestRegressor model to predict lap delta performance and builds advanced race strategy simulations on top of it.
+Overview
 
-This is not a static dashboard — it is a vectorized race simulation engine with optimized inference and strategy modeling.
+This project combines a FastAPI backend, a React-based frontend, and a machine learning model to simulate race scenarios and provide insights into strategy decisions.
 
-🧠 Core Features
-📊 Lap Delta Prediction
+The model is trained on lap-level telemetry data and captures factors such as tyre degradation, fuel load, race progression, and track characteristics to estimate lap performance.
 
-Predicts lap time delta using ML based on:
+Features
+Lap Delta Prediction
+
+The system predicts lap time delta using features such as:
 
 Tyre life
 
@@ -25,17 +27,17 @@ Race progress
 
 Compound type
 
-Driver
+Driver and team encoding
 
-Team
+Track-specific features
 
-Track features
+Strategy Simulation
 
-🏎 Strategy Simulation Engine
+The simulation engine supports:
 
 Optimal pit strategy evaluation
 
-Strategy A vs B comparison
+Strategy A vs Strategy B comparison
 
 Undercut analysis
 
@@ -43,13 +45,11 @@ Tyre degradation modeling
 
 Race pace simulation
 
-Precomputed stint delta optimization
+All simulations are implemented using vectorized operations to ensure fast execution.
 
-All simulations are vectorized and optimized for sub-0.5 second execution.
+Interactive Dashboard
 
-📈 Interactive Dashboard
-
-Built using React + Recharts:
+The frontend is built using React and provides:
 
 Lap delta visualizations
 
@@ -59,8 +59,12 @@ Strategy comparison charts
 
 Race simulation outputs
 
-🏗 System Architecture
-React Frontend  →  FastAPI Backend  →  ML Model  →  Simulation Layer
+System Architecture
+
+The system follows a simple layered architecture:
+
+React Frontend → FastAPI Backend → ML Model → Simulation Layer
+
 Backend
 
 FastAPI
@@ -69,7 +73,7 @@ scikit-learn
 
 pandas
 
-numpy
+NumPy
 
 joblib
 
@@ -81,12 +85,11 @@ React Router
 
 Recharts
 
-Custom analytics components
+Machine Learning Model
 
-🤖 Machine Learning Model
-Model
+The model used is a RandomForestRegressor trained on lap-level data.
 
-RandomForestRegressor
+Hyperparameters:
 
 n_estimators = 300
 
@@ -100,15 +103,16 @@ random_state = 42
 
 n_jobs = -1
 
-Target
-
+Target:
 LapDelta_seconds
 
 Feature Engineering
 
+The following features were engineered to improve prediction quality:
+
 TyreLifeSquared = TyreLife²
 
-FuelProxy = 1 - (LapNumber / TotalLaps)
+FuelProxy = 1 − (LapNumber / TotalLaps)
 
 RaceProgress = LapNumber / TotalLaps
 
@@ -116,90 +120,77 @@ Track one-hot encoding
 
 Track-specific tyre interaction features
 
-Performance
+Model Performance
 
-Mean Absolute Error (MAE): ≈ 0.42 seconds
+Mean Absolute Error (MAE): approximately 0.42 seconds
 
-Trained on 2023 lap-level F1 dataset
+Dataset: 2023 Formula 1 lap-level telemetry
 
-⚡ Performance Optimization
+Performance Optimization
 
-Originally strategy simulation required thousands of model calls.
+The initial implementation relied on repeated model calls, leading to slow simulations.
 
-Optimizations implemented:
+The system was optimized by:
 
-Batch inference (predict_lap_delta_batch)
+Introducing batch prediction for lap delta computation
 
-Vectorized NumPy slicing
+Using vectorized NumPy operations
 
-Reduced DataFrame reconstruction
+Reducing DataFrame reconstruction overhead
 
-Precomputed stint deltas
+Precomputing stint-level deltas
 
-Eliminated redundant model loading
+Avoiding repeated model loading
 
-Current simulation runtime: < 0.5 seconds
+As a result, most simulations now execute in under 0.5 seconds.
 
-📁 Project Structure
+Project Structure
 F1-Intelligent-Race-Analytics/
 │
-├── backend/              # FastAPI inference & simulation
-├── frontend/             # React analytics dashboard
-├── training/             # Model training & feature pipeline
-├── data/                 # Dataset documentation (raw data excluded)
-├── models/               # Model documentation (model excluded)
+├── backend/       # FastAPI inference and simulation logic
+├── frontend/      # React dashboard
+├── training/      # Model training and feature pipeline
+├── data/          # Dataset documentation (raw data excluded)
+├── models/        # Model documentation (model excluded)
 ├── README.md
 └── requirements.txt
-🔄 Reproducibility
+Reproducibility
 
-Raw telemetry and trained model files are excluded from the repository to keep it lightweight and scalable.
+Raw telemetry data and trained model files are not included in the repository to keep it lightweight.
 
-To reproduce:
+To reproduce results:
 
-Regenerate dataset using the training pipeline.
+Generate the dataset using the training pipeline
 
-Train model using training/train_model.py.
+Train the model using the provided training scripts
 
-Place trained model inside models/.
+Place the trained model inside the models/ directory
 
-This design follows professional ML repository standards.
+Deployment
 
-🌍 Deployment Plan
+The project is designed to be deployed as:
 
-Backend → Render
-Frontend → Vercel
+Backend: Render
 
-Environment variable for model path:
+Frontend: Vercel
+
+The model path is configured using an environment variable:
 
 MODEL_PATH=models/lap_delta_driveraware_v3_final.pkl
-🎯 Future Improvements
+Future Work
 
-Probabilistic lap delta prediction (quantile regression)
+Probabilistic lap delta prediction
 
-Safety car event modeling
+Safety car and race event modeling
 
-Driver aggressiveness coefficient
+Driver-specific behavior modeling
 
-Dynamic track temperature modeling
+Track condition and temperature effects
 
-Reinforcement learning strategy agent
+Reinforcement learning–based strategy optimization
 
-🏆 Why This Project Stands Out
-
-Real-world telemetry-based modeling
-
-Optimized inference architecture
-
-Vectorized simulation engine
-
-Production-ready API design
-
-Full-stack analytics interface
-
-Clean ML reproducibility structure
-
-👤 Author
+Author
 
 Abhijeet Kulkarni
-AI & Systems Enthusiast
+AI and Systems Enthusiast
 Formula 1 Analytics Developer

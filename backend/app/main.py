@@ -1,4 +1,7 @@
+import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from app.routes.health import router as health_router
 from app.routes.predict import router as predict_router
 from app.routes.strategy import router as strategy_router
@@ -10,44 +13,41 @@ from app.routes.strategy_mode import router as strategy_mode_router
 from app.routes.drivers import router as drivers_router
 from app.routes.tracks import router as tracks_router
 from app.routes.tyres import router as tyres_router
-
-
-
+from app.routes.win_probability import router as win_prob_router
+from app.routes.multi_stop import router as multi_stop_router
 
 app = FastAPI(
     title="F1 Intelligent Race Analytics API",
-    version="1.0.0"
+    version="2.0.0",
+    description="Race strategy prediction platform built on 2023 F1 telemetry.",
 )
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-# app = FastAPI()
+# ALLOWED_ORIGINS env var is set on Render dashboard in production.
+# Comma-separated: https://your-app.netlify.app,https://custom-domain.com
+_origins_env = os.getenv("ALLOWED_ORIGINS", "")
+ALLOWED_ORIGINS = [o.strip() for o in _origins_env.split(",") if o.strip()] or [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173"
-    ],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
 app.include_router(health_router)
-app.include_router(predict_router, prefix="/predict")
-app.include_router(strategy_router, prefix="/strategy")
-app.include_router(metadata.router, prefix="/metadata", tags=["Metadata"])
-app.include_router(metadata.router)
-app.include_router(analysis_router)
-app.include_router(analysis_router, prefix="/analysis")
-app.include_router(undercut_router, prefix="/analysis")
+app.include_router(predict_router,       prefix="/predict")
+app.include_router(strategy_router,      prefix="/strategy")
+app.include_router(metadata.router,      prefix="/metadata",  tags=["Metadata"])
+app.include_router(analysis_router,      prefix="/analysis")
+app.include_router(undercut_router,      prefix="/analysis")
 app.include_router(race_simulator_router)
 app.include_router(strategy_mode_router, prefix="/analysis")
-
 app.include_router(drivers_router)
 app.include_router(tracks_router)
 app.include_router(tyres_router)
-
+app.include_router(win_prob_router)
+app.include_router(multi_stop_router)

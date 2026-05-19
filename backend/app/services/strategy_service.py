@@ -1,19 +1,11 @@
 import numpy as np
 from app.services.model_service import predict_lap_delta_batch
 from app.utils.driver_team_map import validate_driver_team
+from app.constants.pit_loss import get_pit_loss
+from app.constants.track_info import get_total_laps
 
-
-TRACK_PIT_LOSS = {
-    "Monaco Grand Prix": 18,
-    "Bahrain Grand Prix": 22,
-    "Singapore Grand Prix": 24,
-    "Hungarian Grand Prix": 21,
-}
-
-DEFAULT_PIT_LOSS = 20
 DEGRADATION_FACTOR = 1.8
-MAX_TYRE_LIFE = 35  # realistic upper limit
-
+MAX_TYRE_LIFE = 35
 
 
 def optimal_pit_strategy(
@@ -26,17 +18,17 @@ def optimal_pit_strategy(
     driver_name: str,
     team_name: str,
 ):
-
     validate_driver_team(driver_name, team_name)
 
+    # Always use the correct track lap count regardless of what the caller sends
+    total_laps = get_total_laps(track_name)
+    pit_loss = get_pit_loss(track_name)
     new_compound = (compound_encoded + 1) % 3
 
-    # ---------------- PREBUILD ALL LAPS ON CURRENT TYRE ----------------
+    # ---- Prebuild stint 1 predictions ----
     rows_stint1 = []
-
     for lap in range(current_lap, total_laps):
         tyre_life = current_tyre_life + (lap - current_lap)
-
         rows_stint1.append({
             "tyre_life": tyre_life,
             "lap_number": lap,
@@ -51,7 +43,6 @@ def optimal_pit_strategy(
 
     deltas_stint1 = predict_lap_delta_batch(rows_stint1)
 
-    # Apply degradation amplification once
     amplified_stint1 = []
     for i, lap in enumerate(range(current_lap, total_laps)):
         tyre_life = current_tyre_life + (lap - current_lap)
@@ -59,12 +50,10 @@ def optimal_pit_strategy(
         amplified = delta * (1 + (tyre_life / total_laps) * DEGRADATION_FACTOR)
         amplified_stint1.append(amplified)
 
-    # ---------------- PREBUILD ALL LAPS ON NEW TYRE ----------------
+    # ---- Prebuild stint 2 predictions ----
     rows_stint2 = []
-
     for lap in range(current_lap, total_laps):
         tyre_life = lap - current_lap + 1
-
         rows_stint2.append({
             "tyre_life": tyre_life,
             "lap_number": lap,
@@ -86,28 +75,18 @@ def optimal_pit_strategy(
         amplified = delta * (1 + (tyre_life / total_laps) * DEGRADATION_FACTOR)
         amplified_stint2.append(amplified)
 
-    # Convert to numpy for fast slicing
     amplified_stint1 = np.array(amplified_stint1)
     amplified_stint2 = np.array(amplified_stint2)
 
     strategy_results = []
 
-    pit_loss = TRACK_PIT_LOSS.get(track_name, DEFAULT_PIT_LOSS)
-
-    # ---------------- EVALUATE PIT OPTIONS (NO MODEL CALLS HERE) ----------------
     for pit_lap in range(current_lap + 3, total_laps - 3):
-
         idx = pit_lap - current_lap
-        # Prevent unrealistic long first stint
         if (current_tyre_life + idx) > MAX_TYRE_LIFE:
             continue
-
-
         stint1_time = amplified_stint1[:idx].sum()
         stint2_time = amplified_stint2[idx:].sum()
-
         total_delta = stint1_time + pit_loss + stint2_time
-
         strategy_results.append({
             "pit_lap": pit_lap,
             "total_delta": float(total_delta)

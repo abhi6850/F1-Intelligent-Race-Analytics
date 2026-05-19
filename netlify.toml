@@ -1,9 +1,8 @@
 [build]
   base    = "frontend"
   command = "npm run build"
-  publish = "frontend/dist"
+  publish = "dist"
 
-# Redirect all routes to index.html so React Router works on page refresh
 [[redirects]]
   from   = "/*"
   to     = "/index.html"

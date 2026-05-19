@@ -23,7 +23,7 @@ data/*.csv
 data/*.parquet
 data/*.feather
 data/*.json
-src/
+/src/
 training/
 
 # ── Environment files — contain secrets ──
